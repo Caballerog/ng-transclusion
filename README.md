@@ -33,25 +33,25 @@ You can get the [presentation from this link](./99-presentation/) which is built
                     <a href="./99-presentation/#/what_is_transclusion">Content projection</a>
                 </li>
                 <li>
-                    <a href="#/ng_container">What is the ng-container?</a>
+                    <a href="https://caballerog.github.io/ng-transclusion/slides/index.html#/ng_container">What is the ng-container?</a>
                 </li>                                
                 <li>
-                    <a href="#/structural_directives">Structural Directives</a>
+                    <a href=https://caballerog.github.io/ng-transclusion/slides/index.html#/structural_directives">Structural Directives</a>
                 </li>
                 <li>
-                    <a href="#/ng_content">ng-content</a>
+                    <a href="https://caballerog.github.io/ng-transclusion/slides/index.html#/ng_content">ng-content</a>
                 </li>
                 <li>
-                    <a href="#/ng_template">ng-template</a>
+                    <a href="https://caballerog.github.io/ng-transclusion/slides/index.html#/ng_template">ng-template</a>
                 </li>
                 <li>
-                    <a href="#/asterisk_syntax">Asterisk syntax</a>
+                    <a href="https://caballerog.github.io/ng-transclusion/slides/index.html#/asterisk_syntax">Asterisk syntax</a>
                 </li>
                 <li>
-                    <a href="#/ng_template_outlet">ngTemplateOutlet</a>
+                    <a href="https://caballerog.github.io/ng-transclusion/slides/index.html#/ng_template_outlet">ngTemplateOutlet</a>
                 </li>
                 <li>
-                    <a href="#/ng_template_ctx">ngTemplateOutletContext</a>
+                    <a href="https://caballerog.github.io/ng-transclusion/slides/index.html#/ng_template_ctx">ngTemplateOutletContext</a>
                 </li>
             </ul>
         </div>
