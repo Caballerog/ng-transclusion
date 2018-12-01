@@ -1,0 +1,535 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>Angular's ng-template and transclusion</title>
+
+    <link rel="stylesheet" href="css/reveal.css">
+    <!-- <link rel="stylesheet" href="css/theme/black.css"> -->
+    <link rel="stylesheet" href="css/theme/night.css">
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+    </script>
+
+    <!-- QR Codes -->
+    <script type="text/javascript" src="qrcodejs/qrcode.js"></script>
+    
+    <!-- Manual style tweaks -->
+    <style>
+        /* Columns */
+
+        /* ref: https://stackoverflow.com/questions/30861845/how-to-use-two-column-layout-with-reveal-js#answer-44392145 */
+
+        body {
+            background-color: #222;
+        }
+
+        .cat {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            height: 100%;
+            width: 100%;
+            max-width: 60%;
+            z-index: -1;
+            background: url("./images/cat2.png") center center no-repeat;
+            background-size: cover;
+            transition: all 300ms ease-in;
+            -moz-transition: all 300ms ease-in;
+            -webkit-transition: all 300ms ease-in;
+        }
+
+        .columns {
+            display: flex;
+        }
+
+        .col {
+            flex: 1;
+        }
+
+        .col-author {
+            flex: 0;
+        }
+
+        /* Colours */
+
+        .text-red {
+            color: #f00;
+        }
+
+        .text-green {
+            color: #0f0;
+        }
+
+        .text-yellow {
+            color: #ff0;
+        }
+
+        .text-blue {
+            color: #00f;
+        }
+
+        .text-primary {
+            color: #42affa;
+        }
+
+        .reveal section img.no-border {
+            margin: 0px;
+            background: transparent;
+            border: none;
+            box-shadow: none;
+        }
+
+        img.author {
+            border-radius: 500px;
+            max-width: 200px;
+            font-weight: bolder;
+        }
+
+        ul.author-desc li {
+            list-style-type: none;
+            padding: 0em 0.8em;
+        }
+
+        /* External Link */
+
+        .prj-link {
+            font-family: monospace !important;
+            font-size: 0.7em !important;
+        }
+
+        .prj-link::before {
+            display: inline-block;
+            width: 1em;
+            height: 1em;
+            margin-right: 0.1em;
+            margin-left: 0.1em;
+            content: "";
+            background: url("./images/micro-sd-card.png") no-repeat 0 0;
+            background-size: 100%;
+            vertical-align: middle;
+        }
+
+        /* QR Code */
+
+        .qrcode {
+            background-color: #fff;
+            padding: 1px 1px 1px 1px;
+            display: inline-block;
+        }
+
+        .half-size {
+            font-size: 0.5em !important;
+        }
+
+        .resolution {
+            width: 1080px;
+        }
+
+        .half-resolution {
+            width: 800px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <!-- =================== INTRODUCTION =================== -->
+            <section>
+                <section>
+                    <h3>Angular's ng-template and transclusion</h3>
+
+                    <div class="stretch">
+                        <div class="stretch">
+                            <div class="columns">
+                                <div class="col">
+                                    <div class="columns" style="font-size:0.7em">
+                                        <div class="col-author">
+                                            <img class="no-border author" src="./images/authors/ToniVillena.jpg">
+
+                                        </div>
+                                        <div class="col">
+                                            <ul class="author-desc text-primary">
+                                                <li>Web Developer</li>
+                                                <li>Computer Science Student</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div style="text-align:left">
+                                        <a href="https://github.com/xxxtonixxx">Toni Villena</a>                                        
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="columns" style="font-size:0.7em">
+
+                                        <div class="col">
+                                            <ul class="author-desc text-primary">
+                                                <li> PhD. Computer Science</li>
+                                                <li>Computer Science Teacher</li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-author">
+                                            <img class="no-border author" src="./images/authors/CarlosCaballero.jpg">
+                                        </div>
+                                    </div>
+                                    <div style="text-align:right">
+                                        <a href="https://www.twitter.com/carlillo">Carlos Caballero</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="sretch">
+                            <div class="columns">
+                                <div class="col">
+                                    <img class="no-border" src="./images/logo/angular.svg">
+                                </div>
+                                <!-- Ponemos este o sólo el de angular? -->
+                                <div class="col">
+                                    <img class="no-border" src="./images/logo/angular-malaga.jpeg">
+                                </div>
+                            <div class="columns">                             
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Side notes shown when pressing 's' -->
+                    <aside data-markdown class="notes"></aside>
+                </section>
+
+                <section>
+                    <h2>Contents</h2>
+                    <div class="columns">
+                        <div class="col">
+                            <div class="qrcode" align="center"></div>
+                            <div class="half-size">
+                                <a class="qrcode-link"></a>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <ul style="font-size:0.85em">
+                                <li>
+                                    <a href="#/what_is_transclusion">Content projection</a>
+                                </li>
+                                <li>
+                                    <a href="#/ng_container">What is the ng-container?</a>
+                                </li>                                
+                                <li>
+                                    <a href="#/structural_directives">Structural Directives</a>
+                                </li>
+                                <li>
+                                    <a href="#/ng_content">ng-content</a>
+                                </li>
+                                <li>
+                                    <a href="#/ng_template">ng-template</a>
+                                </li>
+                                <li>
+                                    <a href="#/asterisk_syntax">Asterisk syntax</a>
+                                </li>
+                                <li>
+                                    <a href="#/ng_template_outlet">ngTemplateOutlet</a>
+                                </li>
+                                <li>
+                                    <a href="#/ng_template_ctx">ngTemplateOutletContext</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <section id="what_is_transclusion">
+                <section data-background="#28306a">
+                    <h1 style="font-size: 3em">Let's start!</h1>
+                </section>
+
+                <section>
+                    <h2>Content projection, what is it?</h2>
+                    <blockquote>
+                            "Content projection (also known as <strong>transclusion</strong>) is a way to import HTML content 
+                            from outside the component and insert that content into the component's template in a designated spot."
+                    </blockquote>
+                </section>
+                <section>
+                        <h2>Ok... show me the code!!</h2>
+                        <img class="no-border resolution inline-svg" src="./images/gifs/show-me.gif" />
+                </section>
+                <section>
+                    <h3>It's very simple</h3>
+                    <img class="no-border resolution inline-svg" src="./images/codes/simple-projection.svg" />
+                </section>
+                <section id="ng_container">
+                    <h3>I saw a ng-container, what is that?</h3>
+                    <blockquote>
+                        "The Angular ng-container is a grouping element (syntax element) that doesn't interfere 
+                        with styles or layout because Angular doesn't put it in the DOM."
+                    </blockquote>
+                    <p>
+                        And we can use <strong>structural directives</strong> with it.
+                    </p>
+                </section>
+                <section id="structural_directives">
+                    <h2>Structural... What?</h2>
+                    <blockquote>
+                        "A Structural directive changes the DOM layout by adding, removing or manipulating DOM elements."
+                    </blockquote>
+                </section>
+                <section>
+                    <!-- <h3>You can select what you want to project</h3> -->
+                    <img class="no-border resolution inline-svg" src="./images/codes/card.svg" />
+                </section>
+                <section>
+                    <h3>And then can I...?</h3>
+                    <img class="no-border resolution inline-svg" src="./images/codes/repeat-ng-content.svg" />
+                </section>
+                <section>
+                    <h3>Nope 💔</h3>
+                    <img class="no-border" src="./images/gifs/but-why-spider.gif" style="width: 650px"/>
+                </section>
+                <section id="ng-ng_content">
+                    <aside data-markdown class="notes">
+                        - ng-content works similar to viewContainer.appendChild(content)
+                        - Because of this the lifecycle of the projected content is bound to where it is declared, not where it is displayed.
+                    </aside>
+
+                    <h3>How does ng-content work?</h3>
+                    <p>
+                        <ul>
+                            <li>ng-content doesn't produce content. It simply projects the existing content
+                                <ul>
+                                    <li>consistency of expectations 👀</li>
+                                    <li>performance 🔥</li>
+                                </ul>
+                            </li>
+                            <li>Following the previous rule, it can neither create nor destroy components projected (lifecycle)</li>
+                            <li>Only the last ng-content projects the content</li>
+                        </ul>
+                    </p>
+                </section>
+                <section>
+                    <h2>And... what can I do?</h2>
+                    <p>
+                        Here ng-template comes to the rescue...
+                    </p>
+                    <img class="no-border half-resolution" src="./images/gifs/spider-tell-me-how.gif"/>
+                </section>
+            </section>
+
+            <section>
+                <section data-background="#28306a">
+                    <h1 style="font-size: 3em">That sounds good.</h1>
+                    <h1 style="font-size: 3em">Give me more!</h1>
+                </section>
+                
+                <section id="ng_template">
+                    <h2>Okaay, then what is a ng-template?</h2>
+                    <p>
+                        As the name suggests, it is a template element, a model which you can instantiate, 
+                        hence you can set a template as a component's input, which is pretty useful.
+                    </p>
+                </section>
+                <section id="asterisk_syntax">
+                    <h2>The asterisk (*) syntax</h2>
+                    <blockquote>
+                        "The asterisk is syntactic sugar for something a bit more complicated."
+                    </blockquote>
+                    <p>
+                        You usually see with: *ngIf, *ngFor, *anyDirective,...
+                    </p>
+                    <img class="no-border resolution inline-svg" src="./images/codes/ng-if.svg" />
+                </section>
+
+                <section>
+                    <h2>Then our repeat component?</h2>
+                    <img class="no-border resolution inline-svg" src="./images/codes/repeat-ng-template.svg" />
+                </section>
+
+                <section>
+                    <h2>Spidy is happy again ❤️</h2>
+                    <img class="no-border" src="./images/gifs/spider-happy.gif" style="width: 300px"/>
+                </section>
+
+                <section  id="ng_template_outlet">
+                    <h2>And I? Explain me what that ngTemplateOutlet is!</h2>
+                    <p>
+                        The <strong>ngTemplateOutlet</strong> directive receives a ng-template and 
+                        it's responsible for create the instance and insert it into the DOM.
+                    </p>
+                </section>
+
+                <section>
+                    <h2>But there are more!</h2>
+                    <img class="no-border resolution inline-svg" src="./images/codes/repeat-ng-template-with-context.svg" style="width: 20000px" />
+                </section>
+
+                <section id="ng_template_ctx">
+                    <h2>Yeah, context like in JS!</h2>
+                    <div class="columns">
+                        <div class="col">
+                            <ul>
+                                <li>We can give an object to the instance, which is created by the ngTemplateOutlet, of your ng-template.</li>
+                                <li>That object can contain whatever you want to pass to your template.</li>
+                                <li>Here, we expose the magic of a lot of library components (datatables, angular-material, ng-bootstrap,...).</li>
+                            </ul>
+                        </div>
+                        <div class="col">
+                            <img class="no-border" src="./images/gifs/it-is-magic.gif" style="width: 500px"/>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>We can do awesome things!</h2>
+                    <img class="no-border resolution" src="./images/codes/card-with-default-tmpl.svg" style="margin: -130px;"/>
+                </section>
+
+                <section>
+                    <h2>And...</h2>
+                    <img class="no-border half-resolution" src="./images/gifs/enough.gif"/>
+                </section>
+            </section>
+
+            <!-- =================== END =================== -->
+            <section data-background="#000000">
+                <h2>Thank You</h2>
+                <div class="columns">
+                    <div class="col">
+                        <div class="qrcode" align="center"></div>
+                        <div class="half-size">
+                            <a class="qrcode-link"></a>
+
+                        </div>
+                    </div>
+                    <div class="col">
+                        <img class="plain" src="./images/gifs/bye-bye.gif" width="100%" />
+
+                        <p>
+                            By
+                            <a title="Visit me on Github" href="https://github.com/xxxtonixxx">Toni Villena</a>
+                            <br/>and
+                            <a title="Visit me on Github" href="https://github.com/caballerog">Carlos Caballero</a>
+
+                        </p>
+
+                    </div>
+                </div>
+            </section>
+
+            <section id="references">
+                <h2>References</h2>
+                <ul>
+                    <li><a href="https://angular.io/docs">Angular docs</a></li>
+                    <li>
+                        <a href="https://medium.freecodecamp.org/everything-you-need-to-know-about-ng-template-ng-content-ng-container-and-ngtemplateoutlet-4b7b51223691">Medium</a>,
+                        <a href="https://medium.com/claritydesignsystem/ng-content-the-hidden-docs-96a29d70d11b">Medium</a>
+                        <a href="https://medium.com/@unrealprogrammer/angulars-content-projection-trap-and-why-you-should-consider-using-template-outlet-instead-cc3c4cad87c9">and more Medium</a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/angular/angular/blob/master/packages/common/src/directives/ng_if.ts">Github</a>,
+                        <a href="https://github.com/angular/angular/blob/master/packages/common/src/directives/ng_for_of.ts">Github</a>
+                        <a href="https://gist.github.com/mhevery/d3530294cff2e4a1b3fe15ff75d08855">and more Github</a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/angular/angular/blob/master/packages/common/src/directives/ng_if.ts">Youtube: Deep Dive into content projection</a>
+                    </li>
+                </ul>
+            </section>
+        </div>
+    </div>
+
+    <!-- QR Codes -->
+    <script type="text/javascript">
+        // Get presentation URL
+        var qrcode_url = "https://github.com/Caballerog/ng-transclusion";
+        if (!/^(localhost|127\.0\.1\.1|)$/.test(location.hostname)) {
+            // host is not localhost, get dynamic URL
+            //keep it simple
+            //qrcode_url = window.location.href;
+            console.log("host is not local, dynamic url: " + window.location.href);
+        }
+
+        // Generate QR Codes : class="qrcode"
+        var qrcode_elements = document.getElementsByClassName('qrcode');
+        for (var i = 0; i < qrcode_elements.length; i++) {
+            var qrcode_el = qrcode_elements[i];
+
+            var qrcode = new QRCode(qrcode_el, {
+                text: qrcode_url,
+                width: 350,
+                height: 350
+            });
+
+            // Alter generated image
+            var img_el = qrcode._el.childNodes[1];
+            img_el.classList.add("plain"); // remove border
+        }
+
+        // Add text to links : class="qrcode-link"
+        var qrcode_link_elements = document.getElementsByClassName('qrcode-link');
+        for (var i = 0; i < qrcode_link_elements.length; i++) {
+            var link_el = qrcode_link_elements[i];
+            link_el.textContent = qrcode_url;
+            link_el.href = qrcode_url;
+        }
+    </script>
+
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.js"></script>
+           
+    <script>
+        // More info about config & dependencies:
+        // - https://github.com/hakimel/reveal.js#configuration
+        // - https://github.com/hakimel/reveal.js#dependencies
+        Reveal.initialize({
+            controls: true,
+            progress: true,
+            history: true,
+            center: true,
+            transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+            width: 1280,
+            height: 700,
+            /*           width: "100%",
+                      height: "100%",
+                      margin: 0,
+                      minScale: 1,
+                      maxScale: 1, */
+            dependencies: [
+                { src: 'plugin/markdown/marked.js' },
+                { src: 'plugin/markdown/markdown.js' },
+                { src: 'plugin/notes/notes.js', async: true },
+                { src: 'plugin/zoom-js/zoom.js', async: true },
+                { src: 'plugin/highlight/highlight.js', async: true, callback: function () { hljs.initHighlightingOnLoad(); } }
+            ]
+        });
+    </script>
+
+
+    <script src="lib/js/inlineSVG.js"></script>
+    <script type="text/javascript">
+        // It isn't necessary... But it could usefull
+        if (false && !window.location.protocol.includes('file:')) {
+            inlineSVG.init({
+                svgSelector: 'img.inline-svg', // the class attached to all images that should be inlined
+                initClass: 'js-inlinesvg', // class added to <html>
+            }, () => {
+                console.log('All SVGs inlined');
+            });
+        }
+    </script>
+</body>
+
+</html>

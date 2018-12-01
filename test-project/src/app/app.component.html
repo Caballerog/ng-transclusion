@@ -1,0 +1,36 @@
+<!-- <am-direct-projection>
+  Hello World from {{ title }}!!
+</am-direct-projection> -->
+
+<!-- <am-card>
+  <ng-container card-title>{{ title }}</ng-container>
+  <ng-container card-subtitle>{{ subTitle }}</ng-container>
+  <ng-container card-body>{{ body }}</ng-container>
+  This isn't projected because there is not any ng-content whitout select attribute
+</am-card> -->
+
+<!-- <am-repeat-ng-content [times]="4">
+  <am-icon>{{ icon }}</am-icon>
+</am-repeat-ng-content> -->
+
+<!-- <am-repeat-ng-template [times]="4">
+  <ng-template>
+    <am-icon>{{ icon }}</am-icon>
+  </ng-template>
+</am-repeat-ng-template> -->
+
+<!-- <am-repeat-ng-template-with-context [times]="4">
+    <am-icon *repetable-template="let implicitIndex; let isFirst = isFirst; isLast as isLast">
+      <ng-container *ngIf="isFirst">trekkie</ng-container>
+      <ng-container *ngIf="isLast">heavy</ng-container>
+      <ng-container *ngIf="!isFirst && !isLast">{{ icon }}</ng-container>
+    </am-icon>
+</am-repeat-ng-template-with-context> -->
+
+<am-card-with-default-template>
+    <span *amCardTitle style="color: red">{{ title }}</span>
+    <ng-template amCardSubtitle>
+      <div style="background-color: brown">{{ subTitle }}</div>
+    </ng-template>
+    I have not defined any body 🔥🔥🔥
+</am-card-with-default-template>
